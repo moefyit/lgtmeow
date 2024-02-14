@@ -8,7 +8,7 @@ license = "MIT"
 homepage = "https://github.com/moefyit/lgtmeow"
 repository = "https://github.com/moefyit/lgtmeow"
 readme = "README.md"
-keywords = ["LGTMeow 🐾", "cli", "emoji", "kitchen"]
+keywords = ["LGTM", "meow", "LGTMeow", "cli", "emoji", "kitchen"]
 
 [dependencies]
 clap = { version = "4.5.0", features = ["derive"] }
