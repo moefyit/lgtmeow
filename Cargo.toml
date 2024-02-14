@@ -1,0 +1,26 @@
+[package]
+name = "lgtmeow"
+version = "0.1.0"
+edition = "2021"
+authors = ["Nyakku Shigure <sigure.qaq@gmail.com>"]
+description = "LGTMeow 🐾 —— 「本喵觉得很不错～」"
+license = "MIT"
+homepage = "https://github.com/moefyit/lgtmeow"
+repository = "https://github.com/moefyit/lgtmeow"
+readme = "README.md"
+keywords = ["LGTMeow 🐾", "cli", "emoji", "kitchen"]
+
+[dependencies]
+clap = { version = "4.5.0", features = ["derive"] }
+lazy_static = "1.4.0"
+rand = "0.8.5"
+serde = { version = "1.0.196", features = ["derive"] }
+serde_json = "1.0.113"
+reqwest = { version = "0.11.24", features = ["json", "stream"] }
+dirs = "5.0"
+tokio = { version = "1.36.0", features = ["full"] }
+tokio-stream = "0.1"
+indicatif = "0.17.8"
+cliclack = "0.1.12"
+console = "0.15.8"
+toml = "0.8.10"
