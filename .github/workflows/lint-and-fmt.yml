@@ -1,12 +1,18 @@
-name: clippy
+name: Lint and Format
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches: [main]
+  pull_request:
+  merge_group:
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  run-clippy:
+  lint-and-fmt:
+    name: lint and fmt
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -15,8 +21,8 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
-          components: clippy
-      - uses: actions/cache@v3
+          components: clippy, rustfmt
+      - uses: actions/cache@v4
         id: cargo-cache
         with:
           path: |
@@ -26,8 +32,9 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -q --release -- --no-deps
+      - name: Format with rustfmt
+        run: |
+          cargo fmt --all -- --check
+      - name: Lint with clippy
+        run: |
+          cargo clippy --all-targets --all-features -- -D warnings
