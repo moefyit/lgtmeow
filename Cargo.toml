@@ -10,6 +10,9 @@ repository = "https://github.com/moefyit/lgtmeow"
 readme = "README.md"
 keywords = ["LGTM", "meow", "LGTMeow", "cli", "emoji-kitchen"]
 
+[features]
+copy = ["copypasta"]
+
 [dependencies]
 clap = { version = "4.5.0", features = ["derive"] }
 lazy_static = "1.4.0"
@@ -24,3 +27,4 @@ indicatif = "0.17.8"
 cliclack = "0.1.12"
 console = "0.15.8"
 toml = "0.8.10"
+copypasta = { version = "0.10.1", optional = true }

@@ -21,6 +21,8 @@ pub enum Commands {
 pub struct ChooseArgs {
     #[clap(short, long)]
     pub random: bool,
+    #[clap(short, long)]
+    pub copy: bool,
 }
 
 #[derive(Parser, Debug, PartialEq)]

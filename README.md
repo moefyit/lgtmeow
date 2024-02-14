@@ -17,4 +17,6 @@ lgtmeow setup --default
 lgtmeow -r
 # Use it with github cli
 gh pr review --approve -b "$(lgtmeow -r)"
+# Copy to clipboard (need `copy` feature, run `cargo install lgtmeow --features copy` to enable it)
+lgtmeow -r -c
 ```
