@@ -1,4 +1,4 @@
-# LGTMeow 🐾 —— 「本喵觉得很不错～」
+# LGTMeow 🐾 <sub><samp>—— 「本喵觉得很不错～」</samp></sub>
 
 Nyakku 的自用 LGTM 模板，以「LGTMeow 🐾」为基础的 Emoji Kitchen 扩充版～
 
