@@ -3,6 +3,7 @@ use reqwest::ClientBuilder;
 use serde::Deserialize;
 use serde_json::Value;
 use std::collections::HashMap;
+use std::env;
 use std::future::Future;
 use std::path::{Path, PathBuf};
 use std::pin::Pin;
@@ -11,7 +12,7 @@ use tokio_stream::StreamExt;
 
 static CACHE_FILE: &str = "emojikitchen.json";
 static PAW_PRINTS_CODEPOINT: &str = "1f43e";
-static PAW_PRINTS_KITCHEN_METADATA_PATH: &str = "src/kitchen/paw_prints_kitchen_data.json";
+static PAW_PRINTS_KITCHEN_METADATA_FILE_NAME: &str = "paw_prints_kitchen_data.json";
 static KITCHEN_METADATA_URL: &str =
     "https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json";
 
@@ -154,6 +155,9 @@ pub async fn get_metadata_with_progressbar() -> Result<KitchenMetaData, reqwest:
 
 #[tokio::main]
 async fn main() {
+    let out_dir = env::var_os("OUT_DIR").unwrap();
+    let paw_prints_kitchen_metadata_path =
+        Path::new(&out_dir).join(PAW_PRINTS_KITCHEN_METADATA_FILE_NAME);
     let metadata = get_metadata_with_progressbar().await.unwrap();
     let paw_prints_kitchen_data = metadata
         .data
@@ -161,6 +165,7 @@ async fn main() {
         .expect("Could not get paw prints data");
     let paw_prints_kitchen_string = serde_json::to_string(paw_prints_kitchen_data)
         .expect("Could not serialize paw prints data");
-    std::fs::write(PAW_PRINTS_KITCHEN_METADATA_PATH, paw_prints_kitchen_string)
+    std::fs::write(paw_prints_kitchen_metadata_path, paw_prints_kitchen_string)
         .expect("Could not write paw prints data");
+    println!("cargo:rerun-if-changed=build.rs");
 }

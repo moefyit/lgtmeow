@@ -10,8 +10,8 @@ create-venv:
 
 pre-build:
   wget https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json -O emojikitchen.json -nc
-  jq '.["data"]["1f43e"]' -c emojikitchen.json > src/kitchen/paw_prints_kitchen_data.json
+  jq '.["data"]["1f43e"]' -c emojikitchen.json > paw_prints_kitchen_data.json
 
 clean:
   rm emojikitchen.json
-  rm src/kitchen/paw_prints_kitchen_data.json
+  rm paw_prints_kitchen_data.json
