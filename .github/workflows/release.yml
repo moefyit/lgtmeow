@@ -165,8 +165,7 @@ jobs:
     steps:
       - name: log
         run: |
-          pwd
-          ls
+          python -c "import os; print(os.getcwd(), os.listdir())"
       - name: Publish to Crates.io
         uses: katyo/publish-crates@v2
         id: publish-crates
