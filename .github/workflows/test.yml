@@ -13,18 +13,7 @@ env:
 jobs:
   pre-build:
     name: Run pre-build hook
-    runs-on: ubuntu-latest
-    steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v4
-      # - name: Install just
-      #   uses: extractions/setup-just@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Run pre-build hook
-      #   run: just pre-build
-      - name: Upload prepared kitchen data
-        uses: ./.github/workflows/pre-build.yml
+    uses: ./.github/workflows/pre-build.yml
 
   run-test:
     name: Run tests
