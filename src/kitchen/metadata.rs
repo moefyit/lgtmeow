@@ -1,14 +1,14 @@
 use serde::Deserialize;
 use std::collections::HashMap;
 
-#[derive(Deserialize, PartialEq, Debug, Clone)]
+#[derive(Deserialize, PartialEq, Debug, Clone, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct KitchenMetaData {
     pub known_supported_emoji: Vec<String>,
     pub data: HashMap<String, EmojiItem>,
 }
 
-#[derive(Deserialize, PartialEq, Debug, Clone)]
+#[derive(Deserialize, PartialEq, Debug, Clone, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct EmojiItem {
     pub alt: String,

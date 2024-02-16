@@ -7,9 +7,6 @@ lazy_static! {
     pub static ref CONFIG_DIR: PathBuf = dirs::home_dir()
         .unwrap()
         .join(format!(".config/{}", APP_NAME));
-    pub static ref CACHE_DIR: PathBuf = dirs::home_dir()
-        .unwrap()
-        .join(format!(".cache/{}", APP_NAME));
 }
 
 pub fn ensure_dir(dir: &Path) -> Result<(), std::io::Error> {

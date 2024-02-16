@@ -1,7 +1,7 @@
 use super::cli::SetupArgs;
 use super::config::Config;
-use super::kitchen::download::get_metadata;
 use super::kitchen::metadata::{Combination, KitchenMetaData};
+use super::kitchen::partial_data::get_partial_metadata;
 use super::kitchen::recommands::get_recommand_emoji_combinate_with_paw_prints;
 use console::style;
 use std::collections::HashSet;
@@ -45,13 +45,10 @@ fn get_availiable_emoji_combinations(
     result
 }
 
-pub async fn setup(args: SetupArgs) -> std::io::Result<()> {
-    cliclack::intro(style(" Setup LGTMeow🐾 ").on_cyan().black())?;
+pub fn setup(args: SetupArgs) -> std::io::Result<()> {
+    cliclack::intro(style(" Setup LGTMeow 🐾 ").on_cyan().black())?;
 
-    let mut spinner = cliclack::spinner();
-    spinner.start("Downloading emoji kitchen metadata");
-    let metadata = get_metadata().await.expect("Failed to get metadata");
-    spinner.stop("Downloaded");
+    let metadata = get_partial_metadata();
     let paw_prints_combinations =
         get_availiable_emoji_combinations(PAW_PRINTS_CODEPOINT, &metadata);
     let recommand_emoji_codepoints = get_recommand_emoji_combinate_with_paw_prints();
@@ -82,7 +79,7 @@ pub async fn setup(args: SetupArgs) -> std::io::Result<()> {
             .interact()?;
     }
 
-    cliclack::outro(style("Setup LGTMeow🐾 successfully!").green())?;
+    cliclack::outro(style("Setup LGTMeow 🐾 successfully!").green())?;
 
     let config = Config::new(
         image_width,

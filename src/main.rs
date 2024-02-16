@@ -10,12 +10,11 @@ mod storage;
 use clap::Parser;
 use cli::Cli;
 use config::Config;
-use kitchen::download::get_metadata;
+use kitchen::partial_data::get_partial_metadata;
 use rand::prelude::SliceRandom;
-use storage::{clean_dir, CACHE_DIR, CONFIG_DIR};
+use storage::{clean_dir, CONFIG_DIR};
 
-#[tokio::main]
-async fn main() {
+fn main() {
     let cli = Cli::parse();
     let command = cli.command.unwrap_or(cli::Commands::Choose(cli.choose));
 
@@ -25,7 +24,7 @@ async fn main() {
                 eprintln!("Please run `lgtmeow setup` first.");
                 return;
             }
-            let metadata = get_metadata().await.expect("Failed to get metadata");
+            let metadata = get_partial_metadata();
             let config = Config::load().unwrap();
             let replies = reply::load_saved_replies_from_config(config, &metadata);
             let reply;
@@ -49,11 +48,9 @@ async fn main() {
             }
         }
         cli::Commands::Setup(args) => {
-            setup::setup(args).await.unwrap();
+            setup::setup(args).unwrap();
         }
         cli::Commands::Clean => {
-            // Config::clean().expect("Could not clean config");
-            clean_dir(&CACHE_DIR).expect("Could not clean cache");
             clean_dir(&CONFIG_DIR).expect("Could not clean config");
         }
     }

@@ -1,15 +1,26 @@
-use super::super::storage::{ensure_dir, CACHE_DIR};
-use super::metadata;
 use indicatif::{ProgressBar, ProgressStyle};
 use reqwest::ClientBuilder;
+use serde::Deserialize;
+use serde_json::Value;
+use std::collections::HashMap;
 use std::future::Future;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::pin::Pin;
 use std::{fs::File, io::Write};
 use tokio_stream::StreamExt;
 
+static CACHE_FILE: &str = "emojikitchen.json";
+static PAW_PRINTS_CODEPOINT: &str = "1f43e";
+static PAW_PRINTS_KITCHEN_METADATA_PATH: &str = "src/kitchen/paw_prints_kitchen_data.json";
 static KITCHEN_METADATA_URL: &str =
     "https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json";
+
+#[derive(Deserialize, PartialEq, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct KitchenMetaData {
+    pub known_supported_emoji: Vec<String>,
+    pub data: HashMap<String, Value>,
+}
 
 async fn get_file_size(url: reqwest::Url) -> Result<u64, reqwest::Error> {
     let client = ClientBuilder::new()
@@ -33,20 +44,24 @@ async fn get_file_size(url: reqwest::Url) -> Result<u64, reqwest::Error> {
     Ok(size)
 }
 
-pub async fn download_file<S, FB, FD, FA>(
+pub async fn download_file<S, P, FB, FD, FA>(
     url: reqwest::Url,
-    path: PathBuf,
+    path: P,
     before_download_hook: FB,
     on_download_hook: FD,
     after_download_hook: FA,
 ) -> Result<(), reqwest::Error>
 where
+    P: AsRef<Path>,
     FB: FnOnce(&reqwest::Url, &PathBuf) -> Pin<Box<dyn Future<Output = S>>>,
     FD: Fn(S, &[u8]) -> Pin<Box<dyn Future<Output = S>>>,
     FA: FnOnce(S) -> Pin<Box<dyn Future<Output = ()>>>,
 {
+    let path = path.as_ref().to_path_buf();
     if let Some(p) = path.parent() {
-        ensure_dir(p).expect("Could not create cache directory");
+        if !p.exists() {
+            std::fs::create_dir_all(p).expect("Could not create cache directory");
+        }
     }
     let mut hook_state = before_download_hook(&url, &path).await;
     let mut stream = reqwest::get(url).await?.bytes_stream();
@@ -62,16 +77,16 @@ where
     Ok(())
 }
 
-pub fn dummy_before_download_hook(
-    _: &reqwest::Url,
-    _: &PathBuf,
-) -> Pin<Box<dyn Future<Output = ()>>> {
+#[allow(dead_code)]
+fn dummy_before_download_hook(_: &reqwest::Url, _: &PathBuf) -> Pin<Box<dyn Future<Output = ()>>> {
     Box::pin(async {})
 }
-pub fn dummy_on_download_hook(_: (), _chunk: &[u8]) -> Pin<Box<dyn Future<Output = ()>>> {
+#[allow(dead_code)]
+fn dummy_on_download_hook(_: (), _chunk: &[u8]) -> Pin<Box<dyn Future<Output = ()>>> {
     Box::pin(async {})
 }
-pub fn dummy_after_download_hook(_: ()) -> Pin<Box<dyn Future<Output = ()>>> {
+#[allow(dead_code)]
+fn dummy_after_download_hook(_: ()) -> Pin<Box<dyn Future<Output = ()>>> {
     Box::pin(async {})
 }
 
@@ -82,9 +97,7 @@ struct DownloadState {
 }
 
 #[allow(dead_code)]
-pub async fn get_metadata_with_progressbar() -> Result<metadata::KitchenMetaData, reqwest::Error> {
-    let cache_file = CACHE_DIR.join("emojikitchen.json");
-
+pub async fn get_metadata_with_progressbar() -> Result<KitchenMetaData, reqwest::Error> {
     let before_download_hook = |url: &reqwest::Url,
                                 _path: &PathBuf|
      -> Pin<Box<dyn Future<Output = DownloadState>>> {
@@ -123,37 +136,31 @@ pub async fn get_metadata_with_progressbar() -> Result<metadata::KitchenMetaData
         })
     };
 
-    if !std::path::Path::new(&cache_file).exists() {
+    if !std::path::Path::new(CACHE_FILE).exists() {
         eprintln!("Metadata not found, downloading...");
         download_file(
             reqwest::Url::try_from(KITCHEN_METADATA_URL).expect("Could not parse URL"),
-            cache_file.clone(),
+            CACHE_FILE,
             before_download_hook,
             on_download_hook,
             after_download_hook,
         )
         .await?;
     }
-    let response = std::fs::read_to_string(&cache_file).unwrap();
-    let metadata: metadata::KitchenMetaData = serde_json::from_str(&response).unwrap();
+    let response = std::fs::read_to_string(CACHE_FILE).unwrap();
+    let metadata: KitchenMetaData = serde_json::from_str(&response).unwrap();
     Ok(metadata)
 }
 
-pub async fn get_metadata() -> Result<metadata::KitchenMetaData, reqwest::Error> {
-    let cache_file = CACHE_DIR.join("emojikitchen.json");
-
-    if !std::path::Path::new(&cache_file).exists() {
-        // eprintln!("Metadata not found, downloading...");
-        download_file(
-            reqwest::Url::try_from(KITCHEN_METADATA_URL).expect("Could not parse URL"),
-            cache_file.clone(),
-            dummy_before_download_hook,
-            dummy_on_download_hook,
-            dummy_after_download_hook,
-        )
-        .await?;
-    }
-    let response = std::fs::read_to_string(&cache_file).unwrap();
-    let metadata: metadata::KitchenMetaData = serde_json::from_str(&response).unwrap();
-    Ok(metadata)
+#[tokio::main]
+async fn main() {
+    let metadata = get_metadata_with_progressbar().await.unwrap();
+    let paw_prints_kitchen_data = metadata
+        .data
+        .get(PAW_PRINTS_CODEPOINT)
+        .expect("Could not get paw prints data");
+    let paw_prints_kitchen_string = serde_json::to_string(paw_prints_kitchen_data)
+        .expect("Could not serialize paw prints data");
+    std::fs::write(PAW_PRINTS_KITCHEN_METADATA_PATH, paw_prints_kitchen_string)
+        .expect("Could not write paw prints data");
 }
