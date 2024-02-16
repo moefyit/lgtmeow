@@ -15,7 +15,6 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         target: [x86_64, x86, aarch64]
@@ -25,8 +24,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install OpenSSL
-        run: sudo apt-get install -y libssl-dev musl-tools
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -166,6 +163,10 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: log
+        run: |
+          pwd
+          ls
       - name: Publish to Crates.io
         uses: katyo/publish-crates@v2
         id: publish-crates
