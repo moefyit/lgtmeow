@@ -154,9 +154,6 @@ pub async fn get_metadata_with_progressbar() -> Result<KitchenMetaData, reqwest:
 
 #[tokio::main]
 async fn main() {
-    // wget https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json -O emojikitchen.json -nc
-    // jq '.["data"]["1f43e"]' -c emojikitchen.json > src/kitchen/paw_prints_kitchen_data.json
-
     let metadata = get_metadata_with_progressbar().await.unwrap();
     let paw_prints_kitchen_data = metadata
         .data
