@@ -11,6 +11,7 @@ use clap::Parser;
 use cli::Cli;
 use config::Config;
 use kitchen::download::get_metadata;
+use kitchen::recommands::get_paw_prints_combinations;
 use rand::prelude::SliceRandom;
 use storage::{clean_dir, CACHE_DIR, CONFIG_DIR};
 
@@ -18,6 +19,8 @@ use storage::{clean_dir, CACHE_DIR, CONFIG_DIR};
 async fn main() {
     let cli = Cli::parse();
     let command = cli.command.unwrap_or(cli::Commands::Choose(cli.choose));
+    let get_paw_prints_combinations = get_paw_prints_combinations();
+    println!("{:?}", get_paw_prints_combinations);
 
     match command {
         cli::Commands::Choose(args) => {

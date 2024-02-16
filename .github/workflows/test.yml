@@ -11,6 +11,17 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  pre-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install just
+        uses: extractions/setup-just@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run pre-build hook
+        run: just pre-build
   run-test:
     runs-on: ubuntu-latest
     steps:
