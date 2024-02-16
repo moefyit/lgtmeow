@@ -11,12 +11,21 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  pre-build:
+    name: Run pre-build hook
+    uses: ./.github/workflows/pre-build.yml
+
   lint-and-fmt:
     name: lint and fmt
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Retrieve prepared kitchen data
+        id: download-kitchen-data
+        uses: actions/download-artifact@v4
+      - name: Move kitchen data
+        run: mv ${{ steps.download-kitchen-data.outputs.download-path }}/paw-prints-kitchen-data/paw_prints_kitchen_data.json src/kitchen/paw_prints_kitchen_data.json
       - name: Install toolchain
         uses: dtolnay/rust-toolchain@stable
         with:

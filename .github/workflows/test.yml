@@ -26,10 +26,7 @@ jobs:
         id: download-kitchen-data
         uses: actions/download-artifact@v4
       - name: Move kitchen data
-        run: |
-          echo ${{ steps.download-kitchen-data.outputs.download-path }}/paw-prints-kitchen-data/
-          ls ${{ steps.download-kitchen-data.outputs.download-path }}/paw-prints-kitchen-data/
-          mv ${{ steps.download-kitchen-data.outputs.download-path }}/paw-prints-kitchen-data/paw_prints_kitchen_data.json src/kitchen/paw_prints_kitchen_data.json
+        run: mv ${{ steps.download-kitchen-data.outputs.download-path }}/paw-prints-kitchen-data/paw_prints_kitchen_data.json src/kitchen/paw_prints_kitchen_data.json
       - name: Update rust toolchain
         run: rustup update
       - uses: actions/cache@v4
