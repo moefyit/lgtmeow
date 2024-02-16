@@ -1,0 +1,63 @@
+[build-system]
+requires = ["maturin>=1.4,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "lgtmeow"
+description = "LGTMeow 🐾 —— 「本喵觉得很不错～」"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "Nyakku Shigure", email = "sigure.qaq@gmail.com" }]
+keywords = ["LGTM", "meow", "LGTMeow", "cli", "emoji-kitchen"]
+license = { text = "MIT" }
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Rust",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4.4", "ruff==0.2.1", "pyright>=1.1.293", "build"]
+
+[tool.pyright]
+include = ["python"]
+pythonVersion = "3.8"
+typeCheckingMode = "strict"
+
+[tool.ruff]
+line-length = 120
+target-version = "py38"
+
+[tool.ruff.lint]
+select = [
+  # Pyflakes
+  "F",
+  # Pycodestyle
+  "E",
+  "W",
+  # Isort
+  "I",
+  # Pyupgrade
+  "UP",
+  # Flake8-pyi
+  "PYI",
+  # Flake8-use-pathlib
+  "PTH",
+  # Yesqa
+  "RUF100",
+]
+ignore = [
+  "E501", # line too long, duplicate with ruff fmt
+  "F401", # imported but unused, duplicate with pyright
+  "F841", # local variable is assigned to but never used, duplicate with pyright
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["lgtmeow"]
+combine-as-imports = true
+
+[tool.maturin]
+bindings = "bin"
+features = ["copy"]
