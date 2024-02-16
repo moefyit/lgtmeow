@@ -28,4 +28,3 @@ cliclack = "0.1.12"
 console = "0.15.8"
 toml = "0.8.10"
 copypasta = { version = "0.10.1", optional = true }
-openssl = { version = "0.10", features = ["vendored"] }
