@@ -23,11 +23,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Retrieve prepared kitchen data
+        id: download-kitchen-data
         uses: actions/download-artifact@v4
       - name: Move kitchen data
         run: |
-          echo ${{ outputs.download-path }}
-          mv ${{ outputs.download-path }}/paw_prints_kitchen_data.json src/kitchen/paw_prints_kitchen_data.json
+          echo ${{ steps.download-kitchen-data.outputs.download-path }}
+          mv ${{ steps.download-kitchen-data.outputs.download-path }}/paw_prints_kitchen_data.json src/kitchen/paw_prints_kitchen_data.json
       - name: Update rust toolchain
         run: rustup update
       - uses: actions/cache@v4
