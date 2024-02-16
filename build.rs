@@ -163,5 +163,4 @@ async fn main() {
         .expect("Could not serialize paw prints data");
     std::fs::write(PAW_PRINTS_KITCHEN_METADATA_PATH, paw_prints_kitchen_string)
         .expect("Could not write paw prints data");
-    println!("cargo:rerun-if-changed=src/kitchen/download.rs");
 }
