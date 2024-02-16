@@ -10,7 +10,7 @@ use std::pin::Pin;
 use std::{fs::File, io::Write};
 use tokio_stream::StreamExt;
 
-static CACHE_FILE: &str = "emojikitchen.json";
+static METADATA_CACHE_FILE_NAME: &str = "emojikitchen.json";
 static PAW_PRINTS_CODEPOINT: &str = "1f43e";
 static PAW_PRINTS_KITCHEN_METADATA_FILE_NAME: &str = "paw_prints_kitchen_data.json";
 static KITCHEN_METADATA_URL: &str =
@@ -98,7 +98,12 @@ struct DownloadState {
 }
 
 #[allow(dead_code)]
-pub async fn get_metadata_with_progressbar() -> Result<KitchenMetaData, reqwest::Error> {
+pub async fn get_metadata_with_progressbar<P>(
+    cache_path: P,
+) -> Result<KitchenMetaData, reqwest::Error>
+where
+    P: AsRef<Path>,
+{
     let before_download_hook = |url: &reqwest::Url,
                                 _path: &PathBuf|
      -> Pin<Box<dyn Future<Output = DownloadState>>> {
@@ -137,18 +142,18 @@ pub async fn get_metadata_with_progressbar() -> Result<KitchenMetaData, reqwest:
         })
     };
 
-    if !std::path::Path::new(CACHE_FILE).exists() {
+    if !cache_path.as_ref().exists() {
         eprintln!("Metadata not found, downloading...");
         download_file(
             reqwest::Url::try_from(KITCHEN_METADATA_URL).expect("Could not parse URL"),
-            CACHE_FILE,
+            cache_path.as_ref(),
             before_download_hook,
             on_download_hook,
             after_download_hook,
         )
         .await?;
     }
-    let response = std::fs::read_to_string(CACHE_FILE).unwrap();
+    let response = std::fs::read_to_string(cache_path).unwrap();
     let metadata: KitchenMetaData = serde_json::from_str(&response).unwrap();
     Ok(metadata)
 }
@@ -158,7 +163,10 @@ async fn main() {
     let out_dir = env::var_os("OUT_DIR").unwrap();
     let paw_prints_kitchen_metadata_path =
         Path::new(&out_dir).join(PAW_PRINTS_KITCHEN_METADATA_FILE_NAME);
-    let metadata = get_metadata_with_progressbar().await.unwrap();
+    let metadata_cache_path = Path::new(&out_dir).join(METADATA_CACHE_FILE_NAME);
+    let metadata = get_metadata_with_progressbar(metadata_cache_path)
+        .await
+        .unwrap();
     let paw_prints_kitchen_data = metadata
         .data
         .get(PAW_PRINTS_CODEPOINT)
