@@ -4,8 +4,21 @@ Nyakku 的自用 LGTM 模板，以「LGTMeow 🐾」为基础的 Emoji Kitchen �
 
 ## Installation
 
+### Via cargo
+
 ```bash
+# If you have installed rust toolchain, you can install it via cargo
 cargo install lgtmeow
+# or enable `copy` feature by run
+cargo install lgtmeow --features copy
+```
+
+### Via pipx
+
+```bash
+# lgtmeow has been published to pypi, you can install it via pipx
+pipx install lgtmeow
+# The PyPI version has `copy` feature enabled by default
 ```
 
 ## Usage
@@ -17,7 +30,7 @@ lgtmeow setup --default
 lgtmeow -r
 # Use it with github cli
 gh pr review --approve -b "$(lgtmeow -r)"
-# Copy to clipboard (need `copy` feature, run `cargo install lgtmeow --features copy` to enable it)
+# Copy to clipboard (need `copy` feature)
 lgtmeow -r -c
 ```
 
