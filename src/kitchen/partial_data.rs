@@ -1,7 +1,7 @@
 use super::metadata::{EmojiItem, KitchenMetaData};
 
 pub fn get_paw_prints_combinations() -> EmojiItem {
-    // Run just pre-build to fetch emoji kitchen metadata from GitHub:
+    // Run build.rs to fetch emoji kitchen metadata from GitHub:
     // https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json
     // And prepare via jq to get the paw prints combinations
     let raw_json_data = include_str!("paw_prints_kitchen_data.json");
