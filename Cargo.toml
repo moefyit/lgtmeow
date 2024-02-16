@@ -33,7 +33,7 @@ copypasta = { version = "0.10.1", optional = true }
 openssl = { version = "0.10", features = ["vendored"] }
 
 [profile.release]
-opt-level = 'z'
+opt-level = "z"
 lto = true
 codegen-units = 1
-panic = 'abort'
+panic = "abort"
