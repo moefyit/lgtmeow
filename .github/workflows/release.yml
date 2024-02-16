@@ -163,9 +163,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: log
-        run: |
-          python -c "import os; print(os.getcwd(), os.listdir())"
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
       - name: Publish to Crates.io
         uses: katyo/publish-crates@v2
         id: publish-crates
