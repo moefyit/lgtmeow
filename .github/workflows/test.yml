@@ -24,9 +24,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Retrieve prepared kitchen data
         uses: actions/download-artifact@v4
-        with:
-          path: src/kitchen/
-          name: paw_prints_kitchen_data.json
+      - name: Move kitchen data
+        run: mv paw-prints-kitchen-data src/kitchen/paw_prints_kitchen_data.json
       - name: Update rust toolchain
         run: rustup update
       - uses: actions/cache@v4
