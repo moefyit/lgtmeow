@@ -159,7 +159,7 @@ jobs:
   publish-crates-io:
     runs-on: ubuntu-latest
     name: Publish to Crates.io
-    # if: "startsWith(github.ref, 'refs/tags/')"
+    if: "startsWith(github.ref, 'refs/tags/')"
     permissions:
       contents: write
     steps:
