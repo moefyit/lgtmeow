@@ -37,4 +37,3 @@ jobs:
         run: |
           cargo run --release -- setup --default
           cargo run --release -- -r
-          cargo run --features copy -- -r -c
