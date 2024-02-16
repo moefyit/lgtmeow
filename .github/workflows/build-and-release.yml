@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.12"]
-        target: [x86_64, x86, aarch64]
+        target: [x86_64, x86, aarch64, armv7, s390x, ppc64le]
     name: Ubuntu, ${{ matrix.target }}, Python ${{ matrix.python-version }}
     steps:
       - uses: actions/checkout@v4
