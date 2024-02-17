@@ -11,6 +11,10 @@ readme = "README.md"
 keywords = ["LGTM", "meow", "LGTMeow", "cli", "emoji-kitchen"]
 
 [features]
+default = ["emoji-paw-prints"]
+emojis-all = ["emoji-paw-prints", "emoji-cat"]
+emoji-paw-prints = []
+emoji-cat = []
 copy = ["copypasta"]
 
 [build-dependencies]

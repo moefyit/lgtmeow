@@ -3,7 +3,3 @@
 
 # Python virtual environment
 .venv
-
-# Emoji kitchen metadata
-emojikitchen.json
-partial-kitchen-data/*.json

@@ -1,16 +1,15 @@
 use super::metadata::{EmojiItem, KitchenMetaData};
 
-pub fn get_paw_prints_combinations() -> EmojiItem {
-    // Run build.rs to fetch emoji kitchen metadata from GitHub:
-    // https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json
-    // And prepare via jq to get the paw prints combinations
-    let raw_json_data = include_str!(concat!(
-        env!("OUT_DIR"),
-        "/partial-kitchen-data/paw-prints.json"
-    ));
-    let kitchen_data: EmojiItem = serde_json::from_str(raw_json_data).unwrap();
-    kitchen_data
-}
+// Fetch all emoji-kitchen metadata in build.rs
+// And prepare the partial data for the kitchen
+#[cfg(feature = "emoji-paw-prints")]
+static PAW_PRINTS_RAW_JSON_DATA: &str = include_str!(concat!(
+    env!("OUT_DIR"),
+    "/partial-kitchen-data/paw-prints.json"
+));
+#[cfg(feature = "emoji-cat")]
+static CAT_RAW_JSON_DATA: &str =
+    include_str!(concat!(env!("OUT_DIR"), "/partial-kitchen-data/cat.json"));
 
 pub fn reconstruct_metadata_from_partial_data(
     metadata: &mut KitchenMetaData,
@@ -79,7 +78,16 @@ pub fn reconstruct_metadata_from_partial_data(
 
 pub fn get_partial_metadata() -> KitchenMetaData {
     let mut metadata: KitchenMetaData = Default::default();
-    let emoji_item = get_paw_prints_combinations();
-    reconstruct_metadata_from_partial_data(&mut metadata, &emoji_item);
+    #[cfg(feature = "emoji-paw-prints")]
+    {
+        let paw_prints_emoji_item: EmojiItem =
+            serde_json::from_str(&PAW_PRINTS_RAW_JSON_DATA).unwrap();
+        reconstruct_metadata_from_partial_data(&mut metadata, &paw_prints_emoji_item);
+    }
+    #[cfg(feature = "emoji-cat")]
+    {
+        let cat_emoji_item: EmojiItem = serde_json::from_str(&CAT_RAW_JSON_DATA).unwrap();
+        reconstruct_metadata_from_partial_data(&mut metadata, &cat_emoji_item);
+    }
     metadata
 }

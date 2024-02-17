@@ -11,9 +11,15 @@ use std::{fs::File, io::Write};
 use tokio_stream::StreamExt;
 
 static METADATA_CACHE_FILE_NAME: &str = "emojikitchen.json";
-static PAW_PRINTS_CODEPOINT: &str = "1f43e";
 static PARTIAL_KITCHEIN_DATA_DIR: &str = "partial-kitchen-data";
-static PAW_PRINTS_FILE_NAME: &str = "paw-prints.json";
+#[cfg(feature = "emoji-paw-prints")]
+static PAW_PRINTS_CODEPOINT: &str = "1f43e";
+#[cfg(feature = "emoji-paw-prints")]
+static PAW_PRINTS_FEATURE_NAME: &str = "paw-prints";
+#[cfg(feature = "emoji-cat")]
+static CAT_CODEPOINT: &str = "1f431";
+#[cfg(feature = "emoji-cat")]
+static CAT_FEATURE_NAME: &str = "cat";
 static KITCHEN_METADATA_URL: &str =
     "https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json";
 
@@ -169,18 +175,35 @@ async fn main() {
     let out_dir = env::var_os("OUT_DIR").unwrap();
     let kitchen_partial_data_dir = Path::new(&out_dir).join(PARTIAL_KITCHEIN_DATA_DIR);
     ensure_dir(&kitchen_partial_data_dir).expect("Could not create partial data directory");
-    let paw_prints_partial_data_path = kitchen_partial_data_dir.join(PAW_PRINTS_FILE_NAME);
     let metadata_cache_path = Path::new(&out_dir).join(METADATA_CACHE_FILE_NAME);
     let metadata = get_metadata_with_progressbar(metadata_cache_path)
         .await
         .unwrap();
-    let paw_prints_kitchen_data = metadata
-        .data
-        .get(PAW_PRINTS_CODEPOINT)
-        .expect("Could not get paw prints data");
-    let paw_prints_kitchen_string = serde_json::to_string(paw_prints_kitchen_data)
-        .expect("Could not serialize paw prints data");
-    std::fs::write(paw_prints_partial_data_path, paw_prints_kitchen_string)
-        .expect("Could not write paw prints data");
+    #[cfg(feature = "emoji-paw-prints")]
+    {
+        let paw_prints_partial_data_path =
+            kitchen_partial_data_dir.join(format!("{}.json", PAW_PRINTS_FEATURE_NAME));
+        let paw_prints_kitchen_data = metadata
+            .data
+            .get(PAW_PRINTS_CODEPOINT)
+            .expect("Could not get paw prints data");
+        let paw_prints_kitchen_string = serde_json::to_string(paw_prints_kitchen_data)
+            .expect("Could not serialize paw prints data");
+        std::fs::write(paw_prints_partial_data_path, paw_prints_kitchen_string)
+            .expect("Could not write paw prints data");
+    }
+    #[cfg(feature = "emoji-cat")]
+    {
+        let cat_partial_data_path =
+            kitchen_partial_data_dir.join(format!("{}.json", CAT_FEATURE_NAME));
+        let cat_kitchen_data = metadata
+            .data
+            .get(CAT_CODEPOINT)
+            .expect("Could not get cat data");
+        let cat_kitchen_string =
+            serde_json::to_string(cat_kitchen_data).expect("Could not serialize cat data");
+        std::fs::write(cat_partial_data_path, cat_kitchen_string)
+            .expect("Could not write cat data");
+    }
     println!("cargo:rerun-if-changed=build.rs");
 }

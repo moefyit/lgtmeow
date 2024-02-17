@@ -2,12 +2,22 @@ use super::cli::SetupArgs;
 use super::config::Config;
 use super::kitchen::metadata::{Combination, KitchenMetaData};
 use super::kitchen::partial_data::get_partial_metadata;
-use super::kitchen::recommands::get_recommand_emoji_combinate_with_paw_prints;
+use super::kitchen::recommands::{
+    RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_CAT,
+    RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_PAW_PRINTS,
+};
 use console::style;
 use std::collections::HashSet;
 
+#[cfg(feature = "emoji-paw-prints")]
 static PAW_PRINTS_CODEPOINT: &str = "1f43e";
+#[cfg(feature = "emoji-paw-prints")]
 static PAW_PRINTS_EMOJI: &str = "🐾";
+
+#[cfg(feature = "emoji-cat")]
+static CAT_CODEPOINT: &str = "1f431";
+#[cfg(feature = "emoji-cat")]
+static CAT_EMOJI: &str = "🐱";
 
 fn get_availiable_emoji_combinations(
     emoji_codepoint: &str,
@@ -45,34 +55,83 @@ fn get_availiable_emoji_combinations(
     result
 }
 
-pub fn setup(args: SetupArgs) -> std::io::Result<()> {
-    cliclack::intro(style(" Setup LGTMeow 🐾 ").on_cyan().black())?;
-
-    let metadata = get_partial_metadata();
-    let paw_prints_combinations =
-        get_availiable_emoji_combinations(PAW_PRINTS_CODEPOINT, &metadata);
-    let recommand_emoji_codepoints = get_recommand_emoji_combinate_with_paw_prints();
+fn get_cliclack_inquire_config<'a>(
+    emoji_codepoint: &str,
+    emoji_emoji: &str,
+    recommand_combinate_emoji_codepoints: &'static [&str],
+    metadata: &'a KitchenMetaData,
+) -> (Vec<String>, Vec<(String, String, &'a str)>) {
     let mut cliclack_items = vec![];
     let mut cliclack_initial_values = vec![];
-    for (other_emoji_codepoint, other_emoji, _) in paw_prints_combinations {
-        let emoji = format!("{}+{}", PAW_PRINTS_EMOJI, other_emoji);
-        let is_recommand = recommand_emoji_codepoints.contains(&other_emoji_codepoint);
+    let emoji_combinations = get_availiable_emoji_combinations(emoji_codepoint, metadata);
+    for (other_emoji_codepoint, other_emoji, _) in emoji_combinations {
+        let emoji = format!("{}+{}", emoji_emoji, other_emoji);
+        let is_recommand =
+            recommand_combinate_emoji_codepoints.contains(&other_emoji_codepoint.as_str());
         let hint = if is_recommand { "recommended" } else { "" };
         if is_recommand {
             cliclack_initial_values.push(other_emoji_codepoint.clone());
         }
         cliclack_items.push((other_emoji_codepoint.clone(), emoji, hint));
     }
-    let selected_emoji_codepoints;
+    (cliclack_initial_values, cliclack_items)
+}
+
+pub fn setup(args: SetupArgs) -> std::io::Result<()> {
+    cliclack::intro(style(" Setup LGTMeow 🐾 ").on_cyan().black())?;
+
+    let metadata = get_partial_metadata();
+
+    #[cfg(feature = "emoji-paw-prints")]
+    let (paw_prints_cliclack_initial_values, paw_prints_cliclack_items) =
+        get_cliclack_inquire_config(
+            PAW_PRINTS_CODEPOINT,
+            PAW_PRINTS_EMOJI,
+            RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_PAW_PRINTS,
+            &metadata,
+        );
+    #[cfg(feature = "emoji-cat")]
+    let (cat_cliclack_initial_values, cat_cliclack_items) = get_cliclack_inquire_config(
+        CAT_CODEPOINT,
+        CAT_EMOJI,
+        RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_CAT,
+        &metadata,
+    );
+
+    #[cfg(feature = "emoji-paw-prints")]
+    let selected_emoji_codepoints_combinate_with_paw_prints;
+    #[cfg(feature = "emoji-cat")]
+    let selected_emoji_codepoints_combinate_with_cat;
+
     let image_width: u32;
     if args.default {
         image_width = 14;
-        selected_emoji_codepoints = cliclack_initial_values;
+        #[cfg(feature = "emoji-paw-prints")]
+        {
+            selected_emoji_codepoints_combinate_with_paw_prints =
+                paw_prints_cliclack_initial_values;
+        }
+        #[cfg(feature = "emoji-cat")]
+        {
+            selected_emoji_codepoints_combinate_with_cat = cat_cliclack_initial_values;
+        }
     } else {
-        selected_emoji_codepoints = cliclack::multiselect("Pick your favorite LGTMeow🐾")
-            .initial_values(cliclack_initial_values)
-            .items(&cliclack_items)
-            .interact()?;
+        #[cfg(feature = "emoji-paw-prints")]
+        {
+            selected_emoji_codepoints_combinate_with_paw_prints =
+                cliclack::multiselect("Pick your favorite LGTMeow🐾")
+                    .initial_values(paw_prints_cliclack_initial_values)
+                    .items(&paw_prints_cliclack_items)
+                    .interact()?;
+        }
+        #[cfg(feature = "emoji-cat")]
+        {
+            selected_emoji_codepoints_combinate_with_cat =
+                cliclack::multiselect("Pick your favorite LGTMeow🐱")
+                    .initial_values(cat_cliclack_initial_values)
+                    .items(&cat_cliclack_items)
+                    .interact()?;
+        }
 
         image_width = cliclack::input("Which width do you prefer for the images? (default: 14)")
             .default_input("14")
@@ -81,13 +140,20 @@ pub fn setup(args: SetupArgs) -> std::io::Result<()> {
 
     cliclack::outro(style("Setup LGTMeow 🐾 successfully!").green())?;
 
-    let config = Config::new(
-        image_width,
-        selected_emoji_codepoints
+    let mut emoji_codepoint_pairs = vec![];
+    #[cfg(feature = "emoji-paw-prints")]
+    emoji_codepoint_pairs.extend(
+        selected_emoji_codepoints_combinate_with_paw_prints
             .into_iter()
-            .map(|emoji_codepoint| (PAW_PRINTS_CODEPOINT.to_string(), emoji_codepoint))
-            .collect(),
+            .map(|emoji_codepoint| (PAW_PRINTS_CODEPOINT.to_string(), emoji_codepoint)),
     );
+    #[cfg(feature = "emoji-cat")]
+    emoji_codepoint_pairs.extend(
+        selected_emoji_codepoints_combinate_with_cat
+            .into_iter()
+            .map(|emoji_codepoint| (CAT_CODEPOINT.to_string(), emoji_codepoint)),
+    );
+    let config = Config::new(image_width, emoji_codepoint_pairs);
     config.save()?;
     Ok(())
 }
