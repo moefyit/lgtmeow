@@ -1,4 +1,5 @@
 use crate::cli::args::ChooseArgs;
+#[cfg(feature = "copy")]
 use crate::clipboard;
 use crate::config::Config;
 use crate::kitchen::partial_data::get_partial_metadata;
