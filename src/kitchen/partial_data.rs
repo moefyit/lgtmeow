@@ -4,7 +4,10 @@ pub fn get_paw_prints_combinations() -> EmojiItem {
     // Run build.rs to fetch emoji kitchen metadata from GitHub:
     // https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json
     // And prepare via jq to get the paw prints combinations
-    let raw_json_data = include_str!(concat!(env!("OUT_DIR"), "/paw_prints_kitchen_data.json"));
+    let raw_json_data = include_str!(concat!(
+        env!("OUT_DIR"),
+        "/partial-kitchen-data/paw-prints.json"
+    ));
     let kitchen_data: EmojiItem = serde_json::from_str(raw_json_data).unwrap();
     kitchen_data
 }

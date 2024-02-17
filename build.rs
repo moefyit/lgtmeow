@@ -12,7 +12,8 @@ use tokio_stream::StreamExt;
 
 static METADATA_CACHE_FILE_NAME: &str = "emojikitchen.json";
 static PAW_PRINTS_CODEPOINT: &str = "1f43e";
-static PAW_PRINTS_KITCHEN_METADATA_FILE_NAME: &str = "paw_prints_kitchen_data.json";
+static PARTIAL_KITCHEIN_DATA_DIR: &str = "partial-kitchen-data";
+static PAW_PRINTS_FILE_NAME: &str = "paw-prints.json";
 static KITCHEN_METADATA_URL: &str =
     "https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json";
 
@@ -60,9 +61,7 @@ where
 {
     let path = path.as_ref().to_path_buf();
     if let Some(p) = path.parent() {
-        if !p.exists() {
-            std::fs::create_dir_all(p).expect("Could not create cache directory");
-        }
+        ensure_dir(p).expect("Could not create cache directory");
     }
     let mut hook_state = before_download_hook(&url, &path).await;
     let mut stream = reqwest::get(url).await?.bytes_stream();
@@ -158,11 +157,19 @@ where
     Ok(metadata)
 }
 
+pub fn ensure_dir(dir: &Path) -> Result<(), std::io::Error> {
+    if !dir.exists() {
+        std::fs::create_dir_all(dir)?;
+    }
+    Ok(())
+}
+
 #[tokio::main]
 async fn main() {
     let out_dir = env::var_os("OUT_DIR").unwrap();
-    let paw_prints_kitchen_metadata_path =
-        Path::new(&out_dir).join(PAW_PRINTS_KITCHEN_METADATA_FILE_NAME);
+    let kitchen_partial_data_dir = Path::new(&out_dir).join(PARTIAL_KITCHEIN_DATA_DIR);
+    ensure_dir(&kitchen_partial_data_dir).expect("Could not create partial data directory");
+    let paw_prints_partial_data_path = kitchen_partial_data_dir.join(PAW_PRINTS_FILE_NAME);
     let metadata_cache_path = Path::new(&out_dir).join(METADATA_CACHE_FILE_NAME);
     let metadata = get_metadata_with_progressbar(metadata_cache_path)
         .await
@@ -173,7 +180,7 @@ async fn main() {
         .expect("Could not get paw prints data");
     let paw_prints_kitchen_string = serde_json::to_string(paw_prints_kitchen_data)
         .expect("Could not serialize paw prints data");
-    std::fs::write(paw_prints_kitchen_metadata_path, paw_prints_kitchen_string)
+    std::fs::write(paw_prints_partial_data_path, paw_prints_kitchen_string)
         .expect("Could not write paw prints data");
     println!("cargo:rerun-if-changed=build.rs");
 }

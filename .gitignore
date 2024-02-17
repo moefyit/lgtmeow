@@ -6,4 +6,4 @@
 
 # Emoji kitchen metadata
 emojikitchen.json
-paw_prints_kitchen_data.json
+partial-kitchen-data/*.json
