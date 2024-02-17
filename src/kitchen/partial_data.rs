@@ -81,12 +81,12 @@ pub fn get_partial_metadata() -> KitchenMetaData {
     #[cfg(feature = "emoji-paw-prints")]
     {
         let paw_prints_emoji_item: EmojiItem =
-            serde_json::from_str(&PAW_PRINTS_RAW_JSON_DATA).unwrap();
+            serde_json::from_str(PAW_PRINTS_RAW_JSON_DATA).unwrap();
         reconstruct_metadata_from_partial_data(&mut metadata, &paw_prints_emoji_item);
     }
     #[cfg(feature = "emoji-cat")]
     {
-        let cat_emoji_item: EmojiItem = serde_json::from_str(&CAT_RAW_JSON_DATA).unwrap();
+        let cat_emoji_item: EmojiItem = serde_json::from_str(CAT_RAW_JSON_DATA).unwrap();
         reconstruct_metadata_from_partial_data(&mut metadata, &cat_emoji_item);
     }
     metadata
