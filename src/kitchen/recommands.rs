@@ -1,4 +1,5 @@
 /// A list of recommended combinations of 🐾
+#[cfg(feature = "emoji-paw-prints")]
 pub static RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_PAW_PRINTS: &[&str] = &[
     "2601-fe0f",  // ☁️
     "1f495",      // ❤️
@@ -28,6 +29,7 @@ pub static RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_PAW_PRINTS: &[&str] = &[
 ];
 
 /// A list of recommended combinations of 🐱
+#[cfg(feature = "emoji-cat")]
 pub static RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_CAT: &[&str] = &[
     "1f4df", // 📟
 ];
