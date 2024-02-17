@@ -1,4 +1,4 @@
-use super::metadata::{EmojiItem, KitchenMetaData};
+use crate::kitchen::metadata::{EmojiItem, KitchenMetaData};
 
 // Fetch all emoji-kitchen metadata in build.rs
 // And prepare the partial data for the kitchen

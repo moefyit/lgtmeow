@@ -1,4 +1,4 @@
-use super::metadata::{Combination, KitchenMetaData};
+use crate::kitchen::metadata::{Combination, KitchenMetaData};
 
 pub fn combinate_emojis(
     left_emoji_codepoint: &str,

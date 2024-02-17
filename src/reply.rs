@@ -1,21 +1,11 @@
 use super::config::Config;
 use super::kitchen::combinate::combinate_emojis;
 use super::kitchen::metadata::KitchenMetaData;
-use lazy_static::lazy_static;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Reply {
     pub title: String,
     pub content: String,
-}
-
-impl Reply {
-    fn new(title: &str, content: &str) -> Reply {
-        Reply {
-            title: title.to_string(),
-            content: content.to_string(),
-        }
-    }
 }
 
 fn format_lgtmeow(

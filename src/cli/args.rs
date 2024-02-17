@@ -2,7 +2,7 @@ use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug, PartialEq)]
 #[command(author, version, about, long_about = None)]
-pub struct Cli {
+pub struct Args {
     #[command(subcommand)]
     pub command: Option<Commands>,
 

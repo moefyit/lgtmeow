@@ -1,11 +1,11 @@
-use super::cli::SetupArgs;
-use super::config::Config;
-use super::kitchen::metadata::{Combination, KitchenMetaData};
-use super::kitchen::partial_data::get_partial_metadata;
-use super::kitchen::recommands::{
-    RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_CAT,
-    RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_PAW_PRINTS,
-};
+use crate::cli::args::SetupArgs;
+use crate::config::Config;
+use crate::kitchen::metadata::{Combination, KitchenMetaData};
+use crate::kitchen::partial_data::get_partial_metadata;
+#[cfg(feature = "emoji-cat")]
+use crate::kitchen::recommands::RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_CAT;
+#[cfg(feature = "emoji-paw-prints")]
+use crate::kitchen::recommands::RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_PAW_PRINTS;
 use console::style;
 use std::collections::HashSet;
 
