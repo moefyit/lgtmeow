@@ -16,7 +16,9 @@ fn format_lgtmeow(
 ) -> Reply {
     Reply {
         title: format!("LGTMeow {left_emoji}+{right_emoji}"),
-        content: format!("LGTMeow <img src=\"{kitchen_link}\" width=\"{image_width}\"/>"),
+        content: format!(
+            "LGTMeow <img src=\"{kitchen_link}\" width=\"{image_width}\" alt=\"🐾\"/>"
+        ),
     }
 }
 

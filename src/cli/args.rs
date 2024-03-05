@@ -14,7 +14,7 @@ pub struct Args {
 pub enum Commands {
     Choose(ChooseArgs),
     Setup(SetupArgs),
-    Clean,
+    Reset,
 }
 
 #[derive(Parser, Debug, PartialEq)]
