@@ -24,7 +24,7 @@ fn main() {
         Commands::Setup(args) => {
             setup(args).unwrap();
         }
-        Commands::Clean => {
+        Commands::Reset => {
             clean_dir(&CONFIG_DIR).expect("Could not clean config");
         }
     }
