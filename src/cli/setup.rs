@@ -32,25 +32,30 @@ fn get_availiable_emoji_combinations(
         return result;
     }
     if let Some(emoji_item) = metadata.data.get(emoji_codepoint) {
-        emoji_item.combinations.iter().for_each(|combination| {
-            let (other_emoji_codepoint, other_emoji) =
-                if combination.left_emoji_codepoint == emoji_codepoint {
-                    (
-                        combination.right_emoji_codepoint.to_string(),
-                        combination.right_emoji.to_string(),
-                    )
-                } else {
-                    (
-                        combination.left_emoji_codepoint.to_string(),
-                        combination.left_emoji.to_string(),
-                    )
-                };
-            if added_emoji_codepoints.contains(&other_emoji_codepoint) {
-                return;
-            }
-            added_emoji_codepoints.insert(other_emoji_codepoint.clone());
-            result.push((other_emoji_codepoint, other_emoji, combination.clone()));
-        });
+        emoji_item
+            .combinations
+            .iter()
+            .for_each(|(_, combinations)| {
+                for combination in combinations {
+                    let (other_emoji_codepoint, other_emoji) =
+                        if combination.left_emoji_codepoint == emoji_codepoint {
+                            (
+                                combination.right_emoji_codepoint.to_string(),
+                                combination.right_emoji.to_string(),
+                            )
+                        } else {
+                            (
+                                combination.left_emoji_codepoint.to_string(),
+                                combination.left_emoji.to_string(),
+                            )
+                        };
+                    if added_emoji_codepoints.contains(&other_emoji_codepoint) {
+                        return;
+                    }
+                    added_emoji_codepoints.insert(other_emoji_codepoint.clone());
+                    result.push((other_emoji_codepoint, other_emoji, combination.clone()));
+                }
+            });
     }
     result
 }
