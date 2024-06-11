@@ -17,9 +17,9 @@ pub fn reconstruct_metadata_from_partial_data(
 ) {
     // Collect all known supported emoji
     let mut known_supported_emoji_in_emoji_item = vec![];
-    for combination in emoji_item.combinations.iter() {
-        known_supported_emoji_in_emoji_item.push(combination.left_emoji_codepoint.clone());
-        known_supported_emoji_in_emoji_item.push(combination.right_emoji_codepoint.clone());
+    known_supported_emoji_in_emoji_item.push(emoji_item.emoji_codepoint.clone());
+    for other_emoji_codepoint in emoji_item.combinations.keys() {
+        known_supported_emoji_in_emoji_item.push(other_emoji_codepoint.clone());
     }
     // Push the known supported emoji into the metadata.known_supported_emoji
     for known_supported_emoji in known_supported_emoji_in_emoji_item.iter() {
@@ -40,38 +40,44 @@ pub fn reconstruct_metadata_from_partial_data(
         .or_insert(emoji_item.clone());
 
     // Reconstruct other emoji_item from the combination
-    for combination in &emoji_item.combinations {
-        let emoji_codepoint = emoji_item.emoji_codepoint.clone();
-        let (other_emoji_codepoint, other_emoji) =
-            if combination.left_emoji_codepoint == emoji_codepoint {
-                (
-                    combination.right_emoji_codepoint.clone(),
-                    combination.right_emoji.clone(),
-                )
-            } else {
-                (
-                    combination.left_emoji_codepoint.clone(),
-                    combination.left_emoji.clone(),
-                )
-            };
+    for (_, combinations) in &emoji_item.combinations {
+        for combination in combinations {
+            let emoji_codepoint = emoji_item.emoji_codepoint.clone();
+            let (other_emoji_codepoint, other_emoji) =
+                if combination.left_emoji_codepoint == emoji_codepoint {
+                    (
+                        combination.right_emoji_codepoint.clone(),
+                        combination.right_emoji.clone(),
+                    )
+                } else {
+                    (
+                        combination.left_emoji_codepoint.clone(),
+                        combination.left_emoji.clone(),
+                    )
+                };
 
-        metadata
-            .data
-            .entry(other_emoji_codepoint.clone())
-            .or_insert(EmojiItem {
-                emoji: other_emoji.clone(),
-                emoji_codepoint: other_emoji_codepoint.clone(),
-                ..Default::default()
-            });
+            metadata
+                .data
+                .entry(other_emoji_codepoint.clone())
+                .or_insert(EmojiItem {
+                    emoji: other_emoji.clone(),
+                    emoji_codepoint: other_emoji_codepoint.clone(),
+                    ..Default::default()
+                });
 
-        let other_combinations = &mut metadata
-            .data
-            .get_mut(&other_emoji_codepoint)
-            .unwrap()
-            .combinations;
+            let other_combinations = &mut metadata
+                .data
+                .get_mut(&other_emoji_codepoint)
+                .unwrap()
+                .combinations;
 
-        if !other_combinations.contains(combination) {
-            other_combinations.push(combination.clone());
+            if !other_combinations.contains_key(&emoji_codepoint) {
+                other_combinations.insert(emoji_codepoint.clone(), vec![]);
+            }
+            other_combinations
+                .get_mut(&emoji_codepoint)
+                .unwrap()
+                .push(combination.clone());
         }
     }
 }

@@ -18,13 +18,15 @@ pub struct EmojiItem {
     pub keywords: Vec<String>,
     pub category: String,
     pub subcategory: String,
-    pub combinations: Vec<Combination>,
+    pub combinations: HashMap<String, Vec<Combination>>,
 }
 
 #[derive(Deserialize, PartialEq, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Combination {
     pub g_static_url: String,
+    pub g_board_order: u64,
+    pub is_latest: bool,
     pub alt: String,
     pub left_emoji: String,
     pub left_emoji_codepoint: String,
