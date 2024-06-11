@@ -40,7 +40,7 @@ pub fn reconstruct_metadata_from_partial_data(
         .or_insert(emoji_item.clone());
 
     // Reconstruct other emoji_item from the combination
-    for (_, combinations) in &emoji_item.combinations {
+    for combinations in emoji_item.combinations.values() {
         for combination in combinations {
             let emoji_codepoint = emoji_item.emoji_codepoint.clone();
             let (other_emoji_codepoint, other_emoji) =
