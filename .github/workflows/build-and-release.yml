@@ -28,7 +28,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist --find-interpreter
+          args: --release --locked --out dist --find-interpreter
           sccache: "true"
           manylinux: auto
           # Refer to https://github.com/sfackler/rust-openssl/issues/2036#issuecomment-1724324145
@@ -69,7 +69,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist --find-interpreter
+          args: --release --locked --out dist --find-interpreter
           sccache: "true"
       - name: Upload wheels
         uses: actions/upload-artifact@v4
@@ -93,7 +93,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist --find-interpreter
+          args: --release --locked --out dist --find-interpreter
           sccache: "true"
       - name: Upload wheels
         uses: actions/upload-artifact@v4
