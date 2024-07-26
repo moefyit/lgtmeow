@@ -720,7 +720,6 @@ dependencies = [
  "copypasta",
  "dirs",
  "indicatif",
- "lazy_static",
  "openssl",
  "rand",
  "reqwest",
