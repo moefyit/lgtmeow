@@ -41,6 +41,23 @@ pub static RECOMMAND_EMOJI_CODEPOINTS_COMBINATE_WITH_PAW_PRINTS: &[&str] = &[
     "1f4be",      // 💾
     "2757",       // ❗
     "1f4ac",      // 💬
+    "1f4af",      // 💯
+    "1f49e",      // 💞
+    "1f382",      // 🎂
+    "26f3",       // ⛳
+    "1f3af",      // 🎯
+    "1f0cf",      // 🃏
+    "1f39e-fe0f", // 🎞️
+    "1f4bb",      // 💻
+    "1f48e",      // 💎
+    "1f5d1-fe0f", // 🗑️
+    "231a",       // ⌚
+    "1f514",      // 🔔
+    "1f3b6",      // 🎶
+    "1f92f",      // 🤯
+    "1fae3",      // 🫣
+    "1f973",      // 🥳
+    "1f929",      // 🤩
 ];
 
 /// A list of recommended combinations of 🐱
