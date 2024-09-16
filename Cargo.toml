@@ -9,7 +9,7 @@ homepage = "https://github.com/moefyit/lgtmeow"
 repository = "https://github.com/moefyit/lgtmeow"
 readme = "README.md"
 keywords = ["LGTM", "meow", "LGTMeow", "cli", "emoji-kitchen"]
-rust-version = "1.80"
+rust-version = "1.81"
 
 [features]
 default = ["emoji-paw-prints"]
