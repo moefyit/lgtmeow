@@ -1,5 +1,5 @@
 use super::config::Config;
-use super::kitchen::combinate::combinate_emojis;
+use super::kitchen::combine::combine_emojis;
 use super::kitchen::metadata::KitchenMetaData;
 
 #[derive(Debug, PartialEq, Clone)]
@@ -26,7 +26,7 @@ pub fn load_saved_replies_from_config(config: Config, metadata: &KitchenMetaData
     config
         .emoji_codepoint_pairs
         .into_iter()
-        .filter_map(|(left, right)| combinate_emojis(&left, &right, metadata))
+        .filter_map(|(left, right)| combine_emojis(&left, &right, metadata))
         .map(|combination| {
             format_lgtmeow(
                 &combination.left_emoji,

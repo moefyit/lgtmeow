@@ -1,6 +1,6 @@
 use crate::kitchen::metadata::{Combination, KitchenMetaData};
 
-pub fn combinate_emojis(
+pub fn combine_emojis(
     left_emoji_codepoint: &str,
     right_emoji_codepoint: &str,
     metadata: &KitchenMetaData,
