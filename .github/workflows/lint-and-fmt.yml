@@ -39,4 +39,4 @@ jobs:
         run: |
           cargo clippy --all-targets --all-features -- -D warnings
       - name: Check typos
-        uses: crate-ci/typos@v1
+        uses: crate-ci/typos@master
