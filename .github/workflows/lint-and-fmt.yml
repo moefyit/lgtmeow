@@ -38,3 +38,5 @@ jobs:
       - name: Lint with clippy
         run: |
           cargo clippy --all-targets --all-features -- -D warnings
+      - name: Check typos
+        uses: crate-ci/typos@v1
