@@ -113,8 +113,7 @@ pub fn setup(args: SetupArgs) -> std::io::Result<()> {
         image_width = 14;
         #[cfg(feature = "emoji-paw-prints")]
         {
-            selected_emoji_codepoints_combine_with_paw_prints =
-                paw_prints_cliclack_initial_values;
+            selected_emoji_codepoints_combine_with_paw_prints = paw_prints_cliclack_initial_values;
         }
         #[cfg(feature = "emoji-cat")]
         {
