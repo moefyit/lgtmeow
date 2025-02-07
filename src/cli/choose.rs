@@ -5,7 +5,7 @@ use crate::config::Config;
 use crate::kitchen::partial_data::get_partial_metadata;
 use crate::reply;
 use console::style;
-use rand::prelude::SliceRandom;
+use rand::prelude::IndexedRandom;
 
 pub fn choose(args: ChooseArgs) -> std::io::Result<()> {
     if !Config::exists() {
@@ -20,7 +20,7 @@ pub fn choose(args: ChooseArgs) -> std::io::Result<()> {
     let replies = reply::load_saved_replies_from_config(config, &metadata);
     let selected_reply;
     if args.random {
-        selected_reply = replies.choose(&mut rand::thread_rng()).unwrap();
+        selected_reply = replies.choose(&mut rand::rng()).unwrap();
         eprintln!("{}", selected_reply.title);
         println!("{}", selected_reply.content);
     } else {
