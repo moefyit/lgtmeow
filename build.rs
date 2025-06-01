@@ -43,7 +43,7 @@ async fn get_file_size(url: reqwest::Url) -> Result<u64, reqwest::Error> {
             .to_str()
             .expect("Could not convert to string")
             .split('/')
-            .last()
+            .next_back()
             .expect("Could not get last")
             .parse()
             .expect("Could not parse"),
