@@ -67,6 +67,8 @@ pub static RECOMMEND_EMOJI_CODEPOINTS_COMBINE_WITH_PAW_PRINTS: &[&str] = &[
     "1f329-fe0f", // 🌩️
     "1f496",      // 💖
     "1f49d",      // 💝
+    "1f94a",      // 🥊
+    "1f352",      // 🍒
 ];
 
 /// A list of recommended combinations of 🐱
