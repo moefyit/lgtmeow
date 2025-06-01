@@ -34,9 +34,9 @@ jobs:
       #     key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Format with rustfmt
         run: |
-          cargo fmt --all -- --check
+          cargo +stable fmt --all -- --check
       - name: Lint with clippy
         run: |
-          cargo clippy --all-targets --all-features -- -D warnings
+          cargo +stable clippy --all-targets --all-features -- -D warnings
       - name: Check typos
         uses: crate-ci/typos@master
