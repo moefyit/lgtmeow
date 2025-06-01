@@ -1,6 +1,6 @@
 [package]
 name = "lgtmeow"
-version = "0.6.1"
+version = "0.6.2"
 edition = "2021"
 authors = ["Nyakku Shigure <sigure.qaq@gmail.com>"]
 description = "LGTMeow 🐾 —— 「本喵觉得很不错～」"
@@ -20,9 +20,9 @@ copy = ["copypasta"]
 
 [build-dependencies]
 reqwest = { version = "0.12.4", default-features = false, features = [
-    "json",
-    "stream",
-    "rustls-tls",
+  "json",
+  "stream",
+  "rustls-tls",
 ] }
 tokio = { version = "1.37.0", features = ["full"] }
 tokio-stream = "0.1"
