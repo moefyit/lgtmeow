@@ -10,10 +10,7 @@ use rand::prelude::IndexedRandom;
 pub fn choose(args: ChooseArgs) -> std::io::Result<()> {
     if !Config::exists() {
         eprintln!("Please run `lgtmeow setup` first.");
-        Err(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "Config not found",
-        ))?;
+        Err(std::io::Error::other("Config not found"))?;
     }
     let metadata = get_partial_metadata();
     let config = Config::load().unwrap();
