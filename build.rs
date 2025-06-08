@@ -158,7 +158,13 @@ where
     };
 
     let cache_is_valid = cache_path.as_ref().exists()
-        && cache_path.as_ref().metadata().expect("Failed to access file metadata").modified().expect("Failed to retrieve file modification time") + CACHE_ALIVE_TIME
+        && cache_path
+            .as_ref()
+            .metadata()
+            .expect("Failed to access file metadata")
+            .modified()
+            .expect("Failed to retrieve file modification time")
+            + CACHE_ALIVE_TIME
             > SystemTime::now();
 
     if !cache_is_valid {
