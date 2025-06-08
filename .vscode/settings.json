@@ -1,5 +1,8 @@
 {
   "rust-analyzer.checkOnSave": true,
   "rust-analyzer.check.command": "clippy",
-  "rust-analyzer.cargo.features": ["copy", "emoji-cat"]
+  "rust-analyzer.cargo.features": ["copy", "emoji-cat"],
+  "rust-analyzer.cargo.extraEnv": {
+    "USE_PERSISTABLE_CACHE": "true"
+  }
 }

@@ -7,11 +7,20 @@ use std::env;
 use std::future::Future;
 use std::path::{Path, PathBuf};
 use std::pin::Pin;
+use std::sync::LazyLock;
+use std::time::{Duration, SystemTime};
 use std::{fs::File, io::Write};
 use tokio_stream::StreamExt;
 
-static METADATA_CACHE_FILE_NAME: &str = "emojikitchen.json";
+static APP_NAME: &str = "lgtmeow";
+static METADATA_SAVE_FILE_NAME: &str = "emojikitchen.json";
 static PARTIAL_KITCHEIN_DATA_DIR: &str = "partial-kitchen-data";
+static PERSISTABLE_CACHE_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
+    dirs::home_dir()
+        .expect("Home directory not found. Ensure the environment has a valid home directory.")
+        .join(format!(".cache/{}", APP_NAME))
+});
+static CACHE_ALIVE_TIME: Duration = Duration::from_secs(60 * 60 * 24); // 24 hours
 #[cfg(feature = "emoji-paw-prints")]
 static PAW_PRINTS_CODEPOINT: &str = "1f43e";
 #[cfg(feature = "emoji-paw-prints")]
@@ -148,8 +157,18 @@ where
         })
     };
 
-    if !cache_path.as_ref().exists() {
-        eprintln!("Metadata not found, downloading...");
+    let cache_is_valid = cache_path.as_ref().exists()
+        && cache_path
+            .as_ref()
+            .metadata()
+            .expect("Failed to access file metadata")
+            .modified()
+            .expect("Failed to retrieve file modification time")
+            + CACHE_ALIVE_TIME
+            > SystemTime::now();
+
+    if !cache_is_valid {
+        eprintln!("Metadata not found or expired, downloading...");
         download_file(
             reqwest::Url::try_from(KITCHEN_METADATA_URL).expect("Could not parse URL"),
             cache_path.as_ref(),
@@ -174,10 +193,19 @@ pub fn ensure_dir(dir: &Path) -> Result<(), std::io::Error> {
 #[tokio::main]
 async fn main() {
     let out_dir = env::var_os("OUT_DIR").unwrap();
+    let use_persistable_cache = env::var("USE_PERSISTABLE_CACHE")
+        .map(|v| ["true", "1", "on", "yes"].contains(&v.as_str()))
+        .unwrap_or(false);
+    let metadata_save_path: PathBuf = if use_persistable_cache {
+        let cache_dir = PERSISTABLE_CACHE_DIR.as_ref();
+        ensure_dir(cache_dir).expect("Could not create cache directory");
+        (**PERSISTABLE_CACHE_DIR).join(METADATA_SAVE_FILE_NAME)
+    } else {
+        PathBuf::from(&out_dir).join(METADATA_SAVE_FILE_NAME)
+    };
     let kitchen_partial_data_dir = Path::new(&out_dir).join(PARTIAL_KITCHEIN_DATA_DIR);
     ensure_dir(&kitchen_partial_data_dir).expect("Could not create partial data directory");
-    let metadata_cache_path = Path::new(&out_dir).join(METADATA_CACHE_FILE_NAME);
-    let metadata = get_metadata_with_progressbar(metadata_cache_path)
+    let metadata = get_metadata_with_progressbar(metadata_save_path)
         .await
         .unwrap();
     #[cfg(feature = "emoji-paw-prints")]
