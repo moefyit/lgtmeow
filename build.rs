@@ -17,7 +17,7 @@ static METADATA_SAVE_FILE_NAME: &str = "emojikitchen.json";
 static PARTIAL_KITCHEIN_DATA_DIR: &str = "partial-kitchen-data";
 static PERSISTABLE_CACHE_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
     dirs::home_dir()
-        .unwrap()
+        .expect("Home directory not found. Ensure the environment has a valid home directory.")
         .join(format!(".cache/{}", APP_NAME))
 });
 static CACHE_ALIVE_TIME: Duration = Duration::from_secs(60 * 60 * 24); // 24 hours
@@ -158,7 +158,7 @@ where
     };
 
     let cache_is_valid = cache_path.as_ref().exists()
-        && cache_path.as_ref().metadata().unwrap().modified().unwrap() + CACHE_ALIVE_TIME
+        && cache_path.as_ref().metadata().expect("Failed to access file metadata").modified().expect("Failed to retrieve file modification time") + CACHE_ALIVE_TIME
             > SystemTime::now();
 
     if !cache_is_valid {
