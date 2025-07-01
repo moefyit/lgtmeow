@@ -70,7 +70,7 @@ fn get_cliclack_inquire_config<'a>(
     let mut cliclack_initial_values = vec![];
     let emoji_combinations = get_available_emoji_combinations(emoji_codepoint, metadata);
     for (other_emoji_codepoint, other_emoji, _) in emoji_combinations {
-        let emoji = format!("{}+{}", emoji_emoji, other_emoji);
+        let emoji = format!("{emoji_emoji}+{other_emoji}");
         let is_recommend =
             recommend_combine_emoji_codepoints.contains(&other_emoji_codepoint.as_str());
         let hint = if is_recommend { "recommended" } else { "" };

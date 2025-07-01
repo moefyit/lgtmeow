@@ -6,7 +6,7 @@ static APP_NAME: &str = "lgtmeow";
 pub static CONFIG_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
     dirs::home_dir()
         .unwrap()
-        .join(format!(".config/{}", APP_NAME))
+        .join(format!(".config/{APP_NAME}"))
 });
 
 pub fn ensure_dir(dir: &Path) -> Result<(), std::io::Error> {
