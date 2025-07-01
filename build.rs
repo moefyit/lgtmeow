@@ -18,7 +18,7 @@ static PARTIAL_KITCHEIN_DATA_DIR: &str = "partial-kitchen-data";
 static PERSISTABLE_CACHE_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
     dirs::home_dir()
         .expect("Home directory not found. Ensure the environment has a valid home directory.")
-        .join(format!(".cache/{}", APP_NAME))
+        .join(format!(".cache/{APP_NAME}"))
 });
 static CACHE_ALIVE_TIME: Duration = Duration::from_secs(60 * 60 * 24); // 24 hours
 #[cfg(feature = "emoji-paw-prints")]
@@ -211,7 +211,7 @@ async fn main() {
     #[cfg(feature = "emoji-paw-prints")]
     {
         let paw_prints_partial_data_path =
-            kitchen_partial_data_dir.join(format!("{}.json", PAW_PRINTS_FEATURE_NAME));
+            kitchen_partial_data_dir.join(format!("{PAW_PRINTS_FEATURE_NAME}.json"));
         let paw_prints_kitchen_data = metadata
             .data
             .get(PAW_PRINTS_CODEPOINT)
@@ -224,7 +224,7 @@ async fn main() {
     #[cfg(feature = "emoji-cat")]
     {
         let cat_partial_data_path =
-            kitchen_partial_data_dir.join(format!("{}.json", CAT_FEATURE_NAME));
+            kitchen_partial_data_dir.join(format!("{CAT_FEATURE_NAME}.json"));
         let cat_kitchen_data = metadata
             .data
             .get(CAT_CODEPOINT)
