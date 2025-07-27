@@ -1,7 +1,7 @@
 [package]
 name = "lgtmeow"
 version = "0.6.2"
-edition = "2021"
+edition = "2024"
 authors = ["Nyakku Shigure <sigure.qaq@gmail.com>"]
 description = "LGTMeow 🐾 —— 「本喵觉得很不错～」"
 license = "MIT"
@@ -9,7 +9,7 @@ homepage = "https://github.com/moefyit/lgtmeow"
 repository = "https://github.com/moefyit/lgtmeow"
 readme = "README.md"
 keywords = ["LGTM", "meow", "LGTMeow", "cli", "emoji-kitchen"]
-rust-version = "1.81"
+rust-version = "1.85"
 
 [features]
 default = ["emoji-paw-prints"]
@@ -24,7 +24,7 @@ reqwest = { version = "0.12.19", default-features = false, features = [
   "stream",
   "rustls-tls",
 ] }
-tokio = { version = "1.45.1", features = ["full"] }
+tokio = { version = "1.47.0", features = ["full"] }
 tokio-stream = "0.1.17"
 indicatif = "0.18.0"
 serde = { version = "1.0.219", features = ["derive"] }
@@ -35,7 +35,7 @@ dirs = "6.0"
 clap = { version = "4.5.39", features = ["derive"] }
 rand = "0.9.1"
 serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.140"
+serde_json = "1.0.141"
 dirs = "6.0"
 cliclack = "0.3.6"
 console = "0.16.0"
