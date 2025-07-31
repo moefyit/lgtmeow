@@ -1,4 +1,4 @@
-use crate::storage::{ensure_dir, CONFIG_DIR};
+use crate::storage::{CONFIG_DIR, ensure_dir};
 use serde::{Deserialize, Serialize};
 use std::{io::Write, path::PathBuf};
 

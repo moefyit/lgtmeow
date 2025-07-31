@@ -11,7 +11,7 @@ use cli::args::{Args, Commands};
 use cli::choose::choose;
 use cli::setup::setup;
 
-use storage::{clean_dir, CONFIG_DIR};
+use storage::{CONFIG_DIR, clean_dir};
 
 fn main() {
     let cli = Args::parse();
