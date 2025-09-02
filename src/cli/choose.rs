@@ -30,6 +30,7 @@ pub fn choose(args: ChooseArgs) -> std::io::Result<()> {
                     .map(|(idx, reply)| (idx, reply.title.clone(), "".to_string()))
                     .collect::<Vec<(_, _, _)>>(),
             )
+            .max_rows(10)
             .interact()?;
         selected_reply = &replies[selected_idx];
         cliclack::log::success(&selected_reply.title)?;
