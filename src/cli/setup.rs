@@ -126,6 +126,7 @@ pub fn setup(args: SetupArgs) -> std::io::Result<()> {
                 cliclack::multiselect("Pick your favorite LGTMeow🐾")
                     .initial_values(paw_prints_cliclack_initial_values)
                     .items(&paw_prints_cliclack_items)
+                    .max_rows(10)
                     .interact()?;
         }
         #[cfg(feature = "emoji-cat")]
@@ -134,6 +135,7 @@ pub fn setup(args: SetupArgs) -> std::io::Result<()> {
                 cliclack::multiselect("Pick your favorite LGTMeow🐱")
                     .initial_values(cat_cliclack_initial_values)
                     .items(&cat_cliclack_items)
+                    .max_rows(10)
                     .interact()?;
         }
 
