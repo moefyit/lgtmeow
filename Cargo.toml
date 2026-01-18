@@ -19,27 +19,27 @@ emoji-cat = []
 copy = ["copypasta"]
 
 [build-dependencies]
-reqwest = { version = "0.13.0", default-features = false, features = [
+reqwest = { version = "0.13.1", default-features = false, features = [
   "json",
   "stream",
-  "rustls-tls",
+  "rustls",
 ] }
-tokio = { version = "1.47.0", features = ["full"] }
-tokio-stream = "0.1.17"
-indicatif = "0.18.0"
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.140"
+tokio = { version = "1.49.0", features = ["full"] }
+tokio-stream = "0.1.18"
+indicatif = "0.18.3"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
 dirs = "6.0"
 
 [dependencies]
-clap = { version = "4.5.39", features = ["derive"] }
-rand = "0.9.1"
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.141"
+clap = { version = "4.5.54", features = ["derive"] }
+rand = "0.9.2"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
 dirs = "6.0"
-cliclack = "0.3.6"
-console = "0.16.0"
-toml = "0.9.0"
+cliclack = "0.3.7"
+console = "0.16.2"
+toml = "0.9.8"
 copypasta = { version = "0.10.2", optional = true }
 
 [profile.release]
