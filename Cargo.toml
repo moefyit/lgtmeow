@@ -22,7 +22,6 @@ copy = ["copypasta"]
 reqwest = { version = "0.13.0", default-features = false, features = [
   "json",
   "stream",
-  "rustls-tls",
 ] }
 tokio = { version = "1.47.0", features = ["full"] }
 tokio-stream = "0.1.17"
