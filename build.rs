@@ -41,6 +41,7 @@ pub struct KitchenMetaData {
 
 async fn get_file_size(url: reqwest::Url) -> Result<u64, reqwest::Error> {
     let client = ClientBuilder::new()
+        .use_rustls_tls()
         .build()
         .expect("Could not build client");
     let response = client.get(url).header("Range", "bytes=0-1").send().await?;
