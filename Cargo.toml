@@ -19,14 +19,14 @@ emoji-cat = []
 copy = ["copypasta"]
 
 [build-dependencies]
-reqwest = { version = "0.13.1", default-features = false, features = [
+reqwest = { version = "0.13.3", default-features = false, features = [
   "json",
   "stream",
   "rustls",
 ] }
-tokio = { version = "1.49.0", features = ["full"] }
+tokio = { version = "1.52.1", features = ["full"] }
 tokio-stream = "0.1.18"
-indicatif = "0.18.3"
+indicatif = "0.18.4"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 dirs = "6.0"
