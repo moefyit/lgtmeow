@@ -15,6 +15,11 @@ cargo install lgtmeow --features copy
 
 ### With pipx
 
+Installing from PyPI requires Python 3.11 or newer. CI checks wheel installation
+and CLI execution on CPython 3.11–3.15, including free-threaded 3.15t (with
+prereleases allowed). These tests exercise the packaged Rust executable, not a
+Python extension or its GIL behavior.
+
 ```bash
 # lgtmeow has been published to pypi, you can install it via pipx
 pipx install lgtmeow
