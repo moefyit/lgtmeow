@@ -6,7 +6,7 @@ build-backend = "maturin"
 name = "lgtmeow"
 description = "LGTMeow 🐾 —— 「本喵觉得很不错～」"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [{ name = "Nyakku Shigure", email = "sigure.qaq@gmail.com" }]
 keywords = ["LGTM", "meow", "LGTMeow", "cli", "emoji-kitchen"]
 license = "MIT"
