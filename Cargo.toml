@@ -24,7 +24,7 @@ reqwest = { version = "0.13.5", default-features = false, features = [
   "stream",
   "rustls",
 ] }
-tokio = { version = "1.53.1", features = ["full"] }
+tokio = { version = "1.53.2", features = ["full"] }
 tokio-stream = "0.1.19"
 indicatif = "0.18.6"
 serde = { version = "1.0.229", features = ["derive"] }
